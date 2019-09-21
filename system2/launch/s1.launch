@@ -1,0 +1,11 @@
+<launch>
+	<include file="$(find system2)/launch/maze.launch">
+		<arg name="initial_x" default="-4.0"/>
+		<arg name="initial_y" default="-3.0"/>
+		<arg name="initial_a" default="0.0"/>
+
+		<arg name="goal_x" default="-4.0"/>
+		<arg name="goal_y" default="-2.0"/>
+		<arg name="goal_a" default="0.0"/>
+	</include>
+</launch>

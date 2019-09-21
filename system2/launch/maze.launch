@@ -1,0 +1,53 @@
+<!-- This file can be used to launch a maze world with a turtlebot in it -->
+<launch>
+	<arg name="3d_sensor" default="$(env TURTLEBOT_3D_SENSOR)"/>  <!-- r200, kinect, asus_xtion_pro -->
+
+	<arg name="world_file" default="$(find system2)/worlds/maze.world"/>
+	<arg name="map_file" default="$(find system2)/maps/maze.yaml"/>
+
+	<arg name="robot_radius" default="0.3"/><!-- Originally found in costmap_common_params.yaml -->
+	<arg name="xy_goal_tolerance" default="0.1"/><!-- Originally found in dwa_local_planner_params.yaml -->
+	<arg name="oscillation_timeout" default="5.0"/><!-- Originally found in move_base_params.yaml -->
+	<arg name="oscillation_distance" default="0.15"/><!-- Originally found in move_base_params.yaml -->
+
+	<arg name="initial_x" default="0.0"/>
+	<arg name="initial_y" default="0.0"/>
+	<arg name="initial_a" default="0.0"/>
+
+	<param name="initial_x" value="$(arg initial_x)" />
+	<param name="initial_y" value="$(arg initial_y)" />
+	<param name="initial_a" value="$(arg initial_a)" />
+
+	<arg name="goal_x" default="0.0"/>
+	<arg name="goal_y" default="0.0"/>
+	<arg name="goal_a" default="0.0"/>
+
+	<param name="goal_x" value="$(arg goal_x)" />
+	<param name="goal_y" value="$(arg goal_y)" />
+	<param name="goal_a" value="$(arg goal_a)" />
+
+	<!--  Launch turtle bot with custom world file -->
+	<include file="$(find system2)/launch/includes/robot.launch.xml">
+		<arg name="world_file" value="$(arg world_file)"/>
+		<arg name="3d_sensor" value="$(arg 3d_sensor)"/>
+		<arg name="initial_x" value="$(arg initial_x)"/>
+		<arg name="initial_y" value="$(arg initial_y)"/>
+		<arg name="initial_a" value="$(arg initial_a)"/>
+	</include>	
+
+	<!--  Launch navigation stack -->
+	<include file="$(find system2)/launch/includes/navigation_stack.launch.xml">
+		<arg name="3d_sensor" value="$(arg 3d_sensor)"/>
+		<arg name="map_file" default="$(arg map_file)"/>
+		<arg name="robot_radius" default="$(arg robot_radius)"/>
+		<arg name="xy_goal_tolerance" default="$(arg xy_goal_tolerance)"/>
+		<arg name="oscillation_timeout" default="$(arg oscillation_timeout)"/>
+		<arg name="oscillation_distance" default="$(arg oscillation_distance)"/>
+		<arg name="initial_x" value="$(arg initial_x)"/>
+		<arg name="initial_y" value="$(arg initial_y)"/>
+		<arg name="initial_a" value="$(arg initial_a)"/>
+	</include>
+
+	<!-- Launch navigation planner node -->
+	<node name="system2_node" pkg="system2" type="system2_node" output="screen"/>
+</launch>
